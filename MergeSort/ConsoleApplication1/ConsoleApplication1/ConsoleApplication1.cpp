@@ -277,60 +277,23 @@ bool mergeSort(const std::string &fileName)
 	int size = 1;
 	std::string file_1 = "file_1.txt", file_2 = "file_2.txt", file_3 = "file_3.txt", file_4 = "file_4.txt";
 
-	/*std::ifstream reader_1, reader_2;
-	std::ofstream writer_1, writer_2;
-
-	reader_1.open(fileName);
-	if (!checkRead(reader_1, fileName))
-	{
-		return false;
-	}
-	writer_1.open(file_1);
-	writer_2.open(file_2);
-	if (!checkWrite(writer_1, file_1) || !checkWrite(writer_2, file_2)) {
-		return false;
-	}*/
-
 	fragmentation(fileName, file_1, file_2, size);
-
-	/*reader_1.close();
-	writer_1.close();
-	writer_2.close();*/
 	
 	std::ifstream reader;
 	reader.open(file_2);
 	if (!checkRead(reader, file_2))
 	{
 		return false;
-	}while (!reader.eof())
+	}
+	while (!reader.eof())
 	{
 		reader.close();
 
 		confluence(file_1, file_2, file_3, file_4, size);
 
-		std::cout << "1:" << std::endl;
-		fileRead(file_1);
-		std::cout << std::endl;
-		fileRead(file_2);
-		std::cout << std::endl;
-		fileRead(file_3);
-		std::cout << std::endl;
-		fileRead(file_4);
-		std::cout << std::endl;
-
 		size *= 2;
 
 		confluence(file_3, file_4, file_1, file_2, size);
-
-		std::cout << "2:" << std::endl;
-		fileRead(file_3);
-		std::cout << std::endl;
-		fileRead(file_4);
-		std::cout << std::endl;
-		fileRead(file_1);
-		std::cout << std::endl;
-		fileRead(file_2);
-		std::cout << std::endl;
 
 		size *= 2;
 
