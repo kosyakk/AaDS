@@ -3,7 +3,9 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <random>
 #include <ctime>
+#include <vector>
 
 bool checkRead(std::ifstream &reader, const std::string &fileName)
 {
@@ -23,7 +25,7 @@ bool checkWrite(std::ofstream &writer, const std::string &fileName)
 	return true;
 }
 
-bool fileRead(std::string &fileName)
+bool fileRead(const std::string &fileName)
 {
 	std::ifstream reader;
 
@@ -39,6 +41,7 @@ bool fileRead(std::string &fileName)
 	{
 		std::cout << tmp;
 	}
+	std::cout << std::endl;
 
 	reader.close();
 	return true;
@@ -54,16 +57,22 @@ bool createFileWithRandomNumbers(const std::string &fileName, const int numbersC
 		return false;
 	}
 
-	srand(time(0));
+	std::mt19937 gen(time(0));
 
 	for (int i = 0; i < numbersCount; ++i)
 	{
-		writer << rand() % maxNumberValue;
+		std::uniform_int_distribution<> uid(0, maxNumberValue);
+		writer << uid(gen);
 		writer << " ";
 	}
 	writer.close();
 
 	return true;
+}
+
+bool isEmpty(std::ifstream& pFile)
+{
+	return pFile.peek() == std::ifstream::traits_type::eof();
 }
 
 bool isFileContainsSortedArray(const std::string &fileName)
@@ -80,7 +89,7 @@ bool isFileContainsSortedArray(const std::string &fileName)
 	int tmp;
 	reader >> tmp;
 
-	while (!reader.eof())
+	while (!isEmpty(reader))
 	{
 		int tmp2 = tmp;
 		reader >> tmp;
@@ -113,26 +122,21 @@ bool fragmentation(std::string file_1, std::string file_2, std::string file_3, i
 	int tmp;
 	reader >> tmp;
 	int numberFile = 0;
-	while (!reader.eof())
+	std::vector<std::ofstream *> writeFile;
+	writeFile.push_back(&writer_1);
+	writeFile.push_back(&writer_2);
+
+	while (!isEmpty(reader))
 	{
 		int i = 0;
-		
-			while (!reader.eof() && i < size)
-			{
-				if (numberFile == 0)
-				{
-					writer_1 << tmp;
-					writer_1 << " ";
-				}
-				else
-				{
-					writer_2 << tmp;
-					writer_2 << " ";
-				}
-				
-				reader >> tmp;
-				++i;
-			}
+
+		while (!isEmpty(reader) && i < size)
+		{
+			*writeFile[numberFile] << tmp;
+			*writeFile[numberFile] << " ";
+			reader >> tmp;
+			++i;
+		}
 		numberFile = 1 - numberFile;
 	}
 
@@ -146,8 +150,11 @@ bool fragmentation(std::string file_1, std::string file_2, std::string file_3, i
 bool confluence(std::string file_1, std::string file_2, std::string file_3, std::string file_4, int size)
 {
 	std::ifstream reader_1, reader_2;
-	std::ofstream writer_1(file_3), writer_2(file_4);
-	if (!checkWrite(writer_1, file_3) || !checkWrite(writer_2, file_4)) 
+	std::ofstream writer_1, writer_2;
+
+	writer_1.open(file_3);
+	writer_2.open(file_4);
+	if (!checkWrite(writer_1, file_3) || !checkWrite(writer_2, file_4))
 	{
 		return false;
 	}
@@ -159,108 +166,64 @@ bool confluence(std::string file_1, std::string file_2, std::string file_3, std:
 		return false;
 	}
 
+	std::vector<std::ofstream *> writeFile;
+	writeFile.push_back(&writer_1);
+	writeFile.push_back(&writer_2);
+
 	int tmp_1, tmp_2;
 	reader_1 >> tmp_1;
 	reader_2 >> tmp_2;
 
-	int numberFile = 0, k = 0;
+	int numberFile = 0;
 
-	while (!reader_1.eof() && !reader_2.eof())
+	while (!isEmpty(reader_1) && !isEmpty(reader_2))
 	{
 		int i = 0, j = 0;
-		while (!reader_1.eof() && !reader_2.eof() && i < size && j < size)
+		while (!isEmpty(reader_1) && !isEmpty(reader_2) && i < size && j < size)
 		{
 			if (tmp_1 < tmp_2)
 			{
-				if (numberFile == 0)
-				{
-					writer_1 << tmp_1;
-					writer_1 << " ";
-				}
-				else
-				{
-					writer_2 << tmp_1;
-					writer_2 << " ";
-				}
+				*writeFile[numberFile] << tmp_1;
+				*writeFile[numberFile] << " ";
 				reader_1 >> tmp_1;
 				++i;
 			}
 			else
 			{
-				if (numberFile == 0)
-				{
-					writer_1 << tmp_2;
-					writer_1 << " ";
-				}
-				else
-				{
-					writer_2 << tmp_2;
-					writer_2 << " ";
-				}
+				*writeFile[numberFile] << tmp_2;
+				*writeFile[numberFile] << " ";
 				reader_2 >> tmp_2;
 				++j;
 			}
 		}
-		while (!reader_1.eof() && i < size)
+		while (!isEmpty(reader_1) && i < size)
 		{
-			if (numberFile == 0)
-			{
-				writer_1 << tmp_1;
-				writer_1 << " ";
-			}
-			else
-			{
-				writer_2 << tmp_1;
-				writer_2 << " ";
-			}
+			*writeFile[numberFile] << tmp_1;
+			*writeFile[numberFile] << " ";
 			reader_1 >> tmp_1;
 			++i;
 		}
-		while (!reader_2.eof() && j < size)
+		while (!isEmpty(reader_2) && j < size)
 		{
-			if (numberFile == 0)
-			{
-				writer_1 << tmp_2;
-				writer_1 << " ";
-			}
-			else
-			{
-				writer_2 << tmp_2;
-				writer_2 << " ";
-			}
+			*writeFile[numberFile] << tmp_2;
+			*writeFile[numberFile] << " ";
 			reader_2 >> tmp_2;
 			++j;
 		}
 		numberFile = 1 - numberFile;
 	}
 
-	while (!reader_1.eof())
+	while (!isEmpty(reader_1))
 	{
-		if (numberFile == 0)
-		{
-			writer_1 << tmp_2;
-			writer_1 << " ";
-		}
-		else
-		{
-			writer_2 << tmp_2;
-			writer_2 << " ";
-		}
+		*writeFile[numberFile] << tmp_2;
+		*writeFile[numberFile] << " ";
 		reader_1 >> tmp_1;
 	}
 
-	while (!reader_2.eof())
+	while (!isEmpty(reader_2))
 	{
-		if (numberFile == 0)
-		{
-			writer_1 << tmp_2;
-			writer_1 << " ";
-		}
-		else
-		{
-			writer_2 << tmp_2;
-			writer_2 << " ";
-		}
+		*writeFile[numberFile] << tmp_2;
+		*writeFile[numberFile] << " ";
 		reader_2 >> tmp_2;
 	}
 
@@ -272,20 +235,20 @@ bool confluence(std::string file_1, std::string file_2, std::string file_3, std:
 	return true;
 }
 
-bool mergeSort(const std::string &fileName)
+std::string mergeSort(const std::string &fileName)
 {
 	int size = 1;
 	std::string file_1 = "file_1.txt", file_2 = "file_2.txt", file_3 = "file_3.txt", file_4 = "file_4.txt";
 
 	fragmentation(fileName, file_1, file_2, size);
 	
-	std::ifstream reader;
-	reader.open(file_2);
+	std::ifstream reader(file_2);
 	if (!checkRead(reader, file_2))
 	{
 		return false;
 	}
-	while (!reader.eof())
+
+	while (!isEmpty(reader))
 	{
 		reader.close();
 
@@ -298,17 +261,15 @@ bool mergeSort(const std::string &fileName)
 		size *= 2;
 
 		reader.open(file_2);
-		fileRead(file_2);
 		if (!checkRead(reader, file_2))
 		{
 			return false;
 		}
 
 	}
-
 	reader.close();
 
-	return true;
+	return file_2;
 }
 
 int createAndSortFile(const std::string &fileName, const int numbersCount, const int maxNumberValue)
@@ -317,9 +278,10 @@ int createAndSortFile(const std::string &fileName, const int numbersCount, const
 		return -1;
 	}
 
-	mergeSort(fileName); //Вызов функции сортировки
+	std::string sortFileName;
+	sortFileName = mergeSort(fileName); //Вызов функции сортировки
 
-	if (!isFileContainsSortedArray(fileName)) {
+	if (!isFileContainsSortedArray(sortFileName)) {
 		return -2;
 	}
 
@@ -328,15 +290,9 @@ int createAndSortFile(const std::string &fileName, const int numbersCount, const
 
 int main()
 {
-	std::string file = "file.txt", file_1 = "file_1.txt", file_2 = "file_2.txt", file_3 = "file_3.txt", file_4 = "file_4.txt";
-	const int numbersCount = 10;
-	const int maxNumberValue = 100;
-
-	createFileWithRandomNumbers(file, numbersCount, maxNumberValue);
-	fileRead(file);
-	std::cout << std::endl;
-
-	mergeSort(file);
+	std::string file = "file.txt";
+	const int numbersCount = 1000000;
+	const int maxNumberValue = 1000000;
 
 	for (int i = 0; i < 10; i++) 
 	{
@@ -356,5 +312,5 @@ int main()
 		}
 	}
 
-		return 0;
-	}
+	return 0;
+}
