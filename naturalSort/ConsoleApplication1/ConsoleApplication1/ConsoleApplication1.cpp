@@ -105,18 +105,148 @@ bool isFileContainsSortedArray(const std::string &fileName)
 	return true;
 }
 
-bool fragmentation(std::string file_1, std::string file_2, std::string file_3, int size)
+bool fragmentation(std::string file_1, std::string file_2, std::string file_3)
 {
 	std::ifstream reader;
 	std::ofstream writer_1, writer_2;
 
+	reader.open(file_1);
+	if (!checkRead(reader, file_1))
+	{
+		return false;
+	}
+
+	writer_1.open(file_2);
+	writer_2.open(file_3);
+	if (!checkWrite(writer_1, file_2) || !checkWrite(writer_2, file_3))
+	{
+		return false;
+	}
+
+	int tmp_1, tmp_2, numberFile = 0;
+	std::vector<std::ofstream *> fileWriteNow;
+	fileWriteNow.push_back(&writer_1);
+	fileWriteNow.push_back(&writer_2);
+
+	reader >> tmp_1;
+
+	while (!isEmpty(reader))
+	{
+		*fileWriteNow[numberFile] << tmp_1;
+		*fileWriteNow[numberFile] << " ";
+
+		reader >> tmp_2;
+		if (tmp_1 > tmp_2)
+		{
+			numberFile = 1 - numberFile;
+		}
+		tmp_1 = tmp_2;
+	}
+
+	writer_1.close();
+	writer_2.close();
+	reader.close();
+
 	return true;
 }
 
-bool confluence(std::string file_1, std::string file_2, std::string file_3, std::string file_4, int size)
+bool confluence(std::string file_1, std::string file_2, std::string file_3, std::string file_4)
 {
 	std::ifstream reader_1, reader_2;
 	std::ofstream writer_1, writer_2;
+
+	reader_1.open(file_1);
+	reader_2.open(file_2);
+	if (!checkRead(reader_1, file_1) || !checkRead(reader_2, file_2))
+	{
+		return false;
+	}
+
+	writer_1.open(file_3);
+	writer_2.open(file_4);
+	if (!checkWrite(writer_1, file_3) || !checkWrite(writer_2, file_4))
+	{
+		return false;
+	}
+
+	int tmp[2], read[2];
+	std::vector<std::ofstream *> fileWrite;
+	fileWrite.push_back(&writer_1);
+	fileWrite.push_back(&writer_2);
+	std::vector<std::ifstream *> fileRead;
+	fileRead.push_back(&reader_1);
+	fileRead.push_back(&reader_2);
+
+	*fileRead[0] >> tmp[0];
+	*fileRead[1] >> tmp[1];
+
+	int numberFileIn = 0, numberFileFrom = 0;
+
+	while (!isEmpty(reader_1) && !isEmpty(reader_2))
+	{
+		if (tmp[numberFileFrom] > tmp[1 - numberFileFrom])
+		{
+			numberFileFrom = 1 - numberFileFrom;
+		}
+
+		*fileWrite[numberFileIn] << tmp[numberFileFrom];
+		*fileWrite[numberFileIn] << " ";
+		*fileRead[numberFileFrom] >> read[numberFileFrom];
+
+		if (isEmpty(*fileRead[numberFileFrom]) || tmp[numberFileFrom] > read[numberFileFrom])
+		{
+			numberFileFrom = 1 - numberFileFrom;
+			*fileWrite[numberFileIn] << tmp[numberFileFrom];
+			*fileWrite[numberFileIn] << " ";
+			*fileRead[numberFileFrom] >> read[numberFileFrom];
+
+			while (!isEmpty(*fileRead[numberFileFrom]) && tmp[numberFileFrom] <= read[numberFileFrom])
+			{
+				tmp[numberFileFrom] = read[numberFileFrom];
+				*fileWrite[numberFileIn] << tmp[numberFileFrom];
+				*fileWrite[numberFileIn] << " ";
+				*fileRead[numberFileFrom] >> read[numberFileFrom];
+			}
+
+			tmp[1 - numberFileFrom] = read[1 - numberFileFrom];
+			numberFileIn = 1 - numberFileIn;
+		}
+
+		tmp[numberFileFrom] = read[numberFileFrom];
+	}
+
+	while (!isEmpty(*fileRead[0]))
+	{
+		*fileWrite[numberFileIn] << tmp[0];
+		*fileWrite[numberFileIn] << " ";
+		*fileRead[0] >> read[0];
+
+		if (tmp[0] > read[0])
+		{
+			numberFileIn = 1 - numberFileIn;
+		}
+
+		tmp[0] = read[0];
+	}
+
+	while (!isEmpty(*fileRead[1]))
+	{
+		*fileWrite[numberFileIn] << tmp[1];
+		*fileWrite[numberFileIn] << " ";
+		*fileRead[1] >> read[1];
+
+		if (tmp[1] > read[1])
+		{
+			numberFileIn = 1 - numberFileIn;
+		}
+
+		tmp[1] = read[1];
+	}
+
+	reader_1.close();
+	reader_2.close();
+	writer_1.close();
+	writer_2.close();
 
 	return true;
 }
@@ -126,7 +256,7 @@ std::string naturalSort(const std::string &fileName)
 	int size = 1;
 	std::string file_1 = "file_1.txt", file_2 = "file_2.txt", file_3 = "file_3.txt", file_4 = "file_4.txt";
 
-	fragmentation(fileName, file_1, file_2, size);
+	fragmentation(fileName, file_1, file_2);
 
 	std::ifstream reader(file_2);
 	if (!checkRead(reader, file_2))
@@ -138,7 +268,23 @@ std::string naturalSort(const std::string &fileName)
 	{
 		reader.close();
 
+		confluence(file_1, file_2, file_3, file_4);
 
+		reader.open(file_4);
+		if (!checkRead(reader, file_4))
+		{
+			return false;
+		}
+
+		if (isEmpty(reader))
+		{
+			reader.close();
+			return file_3;
+		}
+
+		reader.close();
+
+		confluence(file_3, file_4, file_1, file_2);
 
 		reader.open(file_2);
 		if (!checkRead(reader, file_2))
@@ -149,7 +295,7 @@ std::string naturalSort(const std::string &fileName)
 	}
 	reader.close();
 
-	return file_2;
+	return file_1;
 }
 
 int createAndSortFile(const std::string &fileName, const int numbersCount, const int maxNumberValue)
@@ -171,8 +317,8 @@ int createAndSortFile(const std::string &fileName, const int numbersCount, const
 int main()
 {
 	std::string file = "file.txt";
-	const int numbersCount = 1000000;
-	const int maxNumberValue = 1000000;
+	const int numbersCount = 100000;
+	const int maxNumberValue = 100000;
 
 	for (int i = 0; i < 10; i++)
 	{
