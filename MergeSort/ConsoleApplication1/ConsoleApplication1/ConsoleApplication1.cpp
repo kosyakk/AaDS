@@ -277,7 +277,6 @@ int createAndSortFile(const std::string &fileName, const int numbersCount, const
 	if (!createFileWithRandomNumbers(fileName, numbersCount, maxNumberValue)) {
 		return -1;
 	}
-	fileRead(fileName);
 
 	std::string sortFileName;
 	sortFileName = mergeSort(fileName); //Вызов функции сортировки
