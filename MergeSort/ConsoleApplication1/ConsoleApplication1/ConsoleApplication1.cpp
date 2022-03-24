@@ -215,7 +215,7 @@ bool confluence(std::string file_1, std::string file_2, std::string file_3, std:
 
 	while (!isEmpty(reader_1))
 	{
-		*writeFile[numberFile] << tmp_2;
+		*writeFile[numberFile] << tmp_1;
 		*writeFile[numberFile] << " ";
 		reader_1 >> tmp_1;
 	}
@@ -241,7 +241,7 @@ std::string mergeSort(const std::string &fileName)
 	std::string file_1 = "file_1.txt", file_2 = "file_2.txt", file_3 = "file_3.txt", file_4 = "file_4.txt";
 
 	fragmentation(fileName, file_1, file_2, size);
-	
+
 	std::ifstream reader(file_2);
 	if (!checkRead(reader, file_2))
 	{
@@ -269,7 +269,7 @@ std::string mergeSort(const std::string &fileName)
 	}
 	reader.close();
 
-	return file_2;
+	return file_1;
 }
 
 int createAndSortFile(const std::string &fileName, const int numbersCount, const int maxNumberValue)
@@ -277,6 +277,7 @@ int createAndSortFile(const std::string &fileName, const int numbersCount, const
 	if (!createFileWithRandomNumbers(fileName, numbersCount, maxNumberValue)) {
 		return -1;
 	}
+	fileRead(fileName);
 
 	std::string sortFileName;
 	sortFileName = mergeSort(fileName); //Вызов функции сортировки
@@ -291,10 +292,10 @@ int createAndSortFile(const std::string &fileName, const int numbersCount, const
 int main()
 {
 	std::string file = "file.txt";
-	const int numbersCount = 1000000;
-	const int maxNumberValue = 1000000;
+	const int numbersCount = 17;
+	const int maxNumberValue = 100;
 
-	for (int i = 0; i < 10; i++) 
+	for (int i = 0; i < 1; i++) 
 	{
 		switch (createAndSortFile(file, numbersCount, maxNumberValue)) 
 		{
