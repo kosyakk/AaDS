@@ -1,11 +1,64 @@
 #include <random>
 #include <iostream>
+#include <vector>
 
 #include "BinaryTree.h"
+
+BinaryTree::BinaryTree()
+{
+	m_root = new Node();
+	m_size = 1;
+}
+
+BinaryTree::BinaryTree(int key)
+{
+	m_root = new Node(key);
+	m_size = 1;
+}
+
+void BinaryTree::deleteTree(Node *tree)
+{
+	if (tree)
+	{
+		deleteTree(tree->leftChild);
+		deleteTree(tree->rightChild);
+		delete tree;
+	}
+	m_size = 0;
+}
+
+bool BinaryTree::isEmpty(Node *tree)
+{
+	if (tree == nullptr)
+	{
+		return true;
+	}
+	return false;
+}
+
+BinaryTree::~BinaryTree()
+{
+	deleteTree(m_root);
+}
 
 Node *BinaryTree::getRoot()
 {
 	return m_root;
+}
+
+int BinaryTree::getHighTree(Node *tree, int high)
+{
+	if (tree)
+	{
+		high = getHighTree(tree->leftChild, high + 1);
+	}
+
+	return high;
+}
+
+int BinaryTree::getNumber(Node *tree, int number)
+{
+	return m_size;
 }
 
 Node *BinaryTree::addNode(Node *subTreeRoot, const int key)
@@ -13,6 +66,7 @@ Node *BinaryTree::addNode(Node *subTreeRoot, const int key)
 	if (subTreeRoot == nullptr) {
 		if (m_root == nullptr) {
 			m_root = new Node(key);
+			m_size = 1;
 			return m_root;
 		}
 		else {
@@ -22,10 +76,12 @@ Node *BinaryTree::addNode(Node *subTreeRoot, const int key)
 
 	if (subTreeRoot->leftChild == nullptr) {
 		subTreeRoot->leftChild = new Node(key);
+		m_size++;
 		return subTreeRoot->leftChild;
 	}
 	else if (subTreeRoot->rightChild == nullptr) {
 		subTreeRoot->rightChild = new Node(key);
+		m_size++;
 		return subTreeRoot->rightChild;
 	}
 	else {
@@ -88,4 +144,16 @@ void BinaryTree::printLevel(Node * subTreeRoot, const int level, const int curre
 		printLevel(subTreeRoot->leftChild, level, currentLevel + 1);
 		printLevel(subTreeRoot->rightChild, level, currentLevel + 1);
 	}
+}
+
+bool BinaryTree::deleteKnot(Node *tree, int key)
+{
+	return true;
+}
+
+std::vector<int> BinaryTree::getVectorKeys(Node *tree, int level)
+{
+	std::vector<int> vector;
+
+	return vector;
 }
