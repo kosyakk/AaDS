@@ -56,7 +56,7 @@ int BinaryTree::getHighTree(Node *tree, int high)
 	return high;
 }
 
-int BinaryTree::getNumber(Node *tree, int number)
+int BinaryTree::getNumber(Node *tree)
 {
 	return m_size;
 }
@@ -146,14 +146,38 @@ void BinaryTree::printLevel(Node * subTreeRoot, const int level, const int curre
 	}
 }
 
-bool BinaryTree::deleteKnot(Node *tree, int key)
+bool BinaryTree::deleteKnot(Node *tree, const int key)
 {
+	if (tree->rightChild == nullptr)
+	{
+		if (tree->leftChild == nullptr)
+		{
+			delete tree;
+		}
+		deleteTree(tree);
+	}
+
 	return true;
 }
 
-std::vector<int> BinaryTree::getVectorKeys(Node *tree, int level)
+void BinaryTree::getKeys(Node *tree, std::vector<int> &vector)
+{
+	if (tree == nullptr)
+	{
+		return;
+	}
+
+	getKeys(tree->leftChild, vector);
+	getKeys(tree->rightChild, vector);
+
+	vector.push_back(tree->key);
+}
+
+std::vector<int> BinaryTree::getVectorKeys(Node *tree)
 {
 	std::vector<int> vector;
+
+	getKeys(tree, vector);
 
 	return vector;
 }

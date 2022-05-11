@@ -44,13 +44,14 @@ public:
 	int getHighTree(Node *tree, int high = 0);
 
 	//получение количества узлов дерева
-	int getNumber(Node *tree, int number = 0);
+	int getNumber(Node *tree);
 
 	//удаление узла из дерева по ключу(возвращает true, если узел был удалён)
-	bool deleteKnot(Node *tree, int key);
+	bool deleteKnot(Node *tree, const int key);
 
 	//получение вектора(std::vector<int>), содержащего все ключи дерева(обход вершин производить любым способом);
-	std::vector<int> getVectorKeys(Node *tree, int level = 0);
+	std::vector<int> getVectorKeys(Node *tree);
+	void getKeys(Node *tree, std::vector<int> &vector);
 
 	//вывод в консоль дерева по уровням(через последовательные вызовы предыдущего метода);
 	void printHorizontal();
