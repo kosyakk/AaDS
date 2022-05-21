@@ -18,13 +18,13 @@ BinaryTree::BinaryTree(int key)
 
 void BinaryTree::deleteTree(Node *tree)
 {
-	if (tree)
+	if (tree != nullptr)
 	{
 		deleteTree(tree->leftChild);
 		deleteTree(tree->rightChild);
 		delete tree;
+		m_size--;
 	}
-	m_size = 0;
 }
 
 bool BinaryTree::isEmpty(Node *tree)
@@ -39,6 +39,7 @@ bool BinaryTree::isEmpty(Node *tree)
 BinaryTree::~BinaryTree()
 {
 	deleteTree(m_root);
+	m_size = 0;
 }
 
 Node *BinaryTree::getRoot()
@@ -96,49 +97,29 @@ Node *BinaryTree::addNode(Node *subTreeRoot, const int key)
 
 void BinaryTree::printHorizontal()
 {
-	printHorizontal(m_root);
-}
-
-void BinaryTree::printHorizontal(Node *subTreeRoot, const int level)
-{
-	using std::cout;
-	using std::endl;
-
-	if (subTreeRoot == nullptr) {
-		if (subTreeRoot == m_root) {
-			cout << "Tree is empty" << endl;
-		}
-		return;
+	for (int i = 0; i < this->getHighTree(this->getRoot()); i++)
+	{
+		printLevel(i);
+		std::cout << std::endl;
 	}
-
-	printHorizontal(subTreeRoot->rightChild, level + 1);
-
-	for (int i = 0; i < level; i++)
-		cout << "   ";
-	cout << subTreeRoot->key << endl;
-
-	printHorizontal(subTreeRoot->leftChild, level + 1);
 }
 
 void BinaryTree::printLevel(const int level)
 {
-	printLevel(m_root, level, 0);
+	printLevel(m_root, level);
 }
 
 void BinaryTree::printLevel(Node * subTreeRoot, const int level, const int currentLevel)
 {
-	using std::cout;
-	using std::endl;
-
 	if (subTreeRoot == nullptr) {
 		if (subTreeRoot == m_root) {
-			cout << "Tree is empty" << endl;
+			std::cout << "Tree is empty" << std::endl;
 		}
 		return;
 	}
 
 	if (currentLevel == level) {
-		cout << subTreeRoot->key << "   ";
+		std::cout << subTreeRoot->key << "   ";
 	}
 	else if (currentLevel < level) {
 		printLevel(subTreeRoot->leftChild, level, currentLevel + 1);
@@ -146,19 +127,45 @@ void BinaryTree::printLevel(Node * subTreeRoot, const int level, const int curre
 	}
 }
 
-bool BinaryTree::deleteKnot(Node *tree, const int key)
-{
-	if (tree->rightChild == nullptr)
-	{
-		if (tree->leftChild == nullptr)
-		{
-			delete tree;
-		}
-		deleteTree(tree);
-	}
-
-	return true;
-}
+//Node *BinaryTree::getKnotTree(Node *tree, const int key)
+//{
+//	if (tree == nullptr)
+//	{
+//		return nullptr;
+//	}
+//
+//	if (tree->leftChild != nullptr && tree->leftChild->key == key)
+//	{
+//		return tree->leftChild;
+//	}
+//	if (tree->rightChild != nullptr && tree->rightChild->key == key)
+//	{
+//		return tree->rightChild;
+//	}
+//
+//	getKnotTree(tree->leftChild, key);
+//	getKnotTree(tree->rightChild, key);
+//}
+//
+//bool BinaryTree::deleteKnot(Node *tree, const int key)
+//{
+//	tree = getKnotTree(tree, key);
+//
+//	if (tree == nullptr)
+//	{
+//		return false;
+//	}
+//
+//	if (tree->rightChild == nullptr)
+//	{
+//		if (tree->leftChild == nullptr)
+//		{
+//			delete tree;
+//		}
+//	}
+//
+//	return true;
+//}
 
 void BinaryTree::getKeys(Node *tree, std::vector<int> &vector)
 {
