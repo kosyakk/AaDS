@@ -5,5 +5,8 @@ int main()
 {
 	BinaryTreeSearch tree;
 
-	tree.printHorizontal;
+	tree.addNode(tree.getRoot(), 3);
+	tree.addNode(tree.getRoot(), 5);
+
+	tree.printHorizontal();
 }

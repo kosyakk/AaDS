@@ -3,6 +3,7 @@
 
 class BinaryTreeSearch : public BinaryTree
 {
+public:
 	//конструкторы(по умолчанию, -копирования);
 	BinaryTreeSearch();
 	
@@ -10,14 +11,14 @@ class BinaryTreeSearch : public BinaryTree
 	~BinaryTreeSearch();
 	
 	//поиск узла дерева по ключу;
-	Node *getKnotByKey(Node *tree, const int key);
+	Node *getKnotByKey(Node *subTreeRoot, const int key);
 	
 	//получение минимального / максимального ключа дерева(имеет другой алгоритм);
 	int getMaxKey();
 	int getMinKey();
 
 	//добавление узла в дерево(имеет другой алгоритм);
-	void addKnot(const int key);
+	Node *addNode(Node *subTreeRoot, const int key);
 	
 	//удаление узла из дерева по ключу(возвращает true, если узел был удалён) (имеет другой алгоритм);
 	bool deleteKnot(const int key);
