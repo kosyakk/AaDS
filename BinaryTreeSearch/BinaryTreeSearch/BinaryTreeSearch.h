@@ -1,18 +1,26 @@
 #pragma once
-class BinaryTreeSearch
+#include "binaryTree.h"
+
+class BinaryTreeSearch : public BinaryTree
 {
 	//конструкторы(по умолчанию, -копирования);
+	BinaryTreeSearch();
 	
 	//деструктор;
+	~BinaryTreeSearch();
 	
 	//поиск узла дерева по ключу;
+	Node *getKnotByKey(Node *tree, const int key);
 	
 	//получение минимального / максимального ключа дерева(имеет другой алгоритм);
-	
+	int getMaxKey();
+	int getMinKey();
+
 	//добавление узла в дерево(имеет другой алгоритм);
+	void addKnot(const int key);
 	
 	//удаление узла из дерева по ключу(возвращает true, если узел был удалён) (имеет другой алгоритм);
-	
+	bool deleteKnot(const int key);
 	
 	//-удаление узла из дерева по индексу(возвращает true, если узел был удалён) (имеет другой алгоритм);
 	//-получение уровня вершины по ключу(возвращает индекс уровня или - 1, если вершина не найдена) (имеет другой алгоритм);

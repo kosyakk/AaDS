@@ -3,5 +3,7 @@
 
 int main()
 {
+	BinaryTreeSearch tree;
 
+	tree.printHorizontal;
 }
