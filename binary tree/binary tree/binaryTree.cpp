@@ -22,8 +22,8 @@ void BinaryTree::deleteTree(Node *tree)
 	{
 		deleteTree(tree->leftChild);
 		deleteTree(tree->rightChild);
-		delete tree;
 		m_size--;
+		delete tree;
 	}
 }
 
@@ -166,6 +166,170 @@ void BinaryTree::printLevel(Node * subTreeRoot, const int level, const int curre
 //
 //	return true;
 //}
+
+Node * BinaryTree::getTreeByKey(Node *tree, const int key)
+{
+	if (tree)
+	{
+		if (tree->leftChild && tree->leftChild->key == key)
+		{
+			return tree->leftChild;
+		}
+		if (tree->rightChild && tree->rightChild->key == key)
+		{
+			return tree->rightChild;
+		}
+	}
+
+	return tree;
+}
+
+Node* BinaryTree::getParentByKey(Node *tree, int key)
+{
+	if (tree)
+	{
+		if (tree->leftChild || tree->rightChild)
+		{
+			if ((tree->leftChild && tree->leftChild->key == key) ||
+				(tree->rightChild && tree->rightChild->key == key))
+			{
+				return tree;
+			}
+
+		getParentByKey(tree->leftChild, key);
+		getParentByKey(tree->rightChild, key);
+			
+		}
+	}
+
+	return nullptr;
+}
+
+bool BinaryTree::deleteKnot(Node *tree, const int key)
+{
+	if (tree == nullptr)
+	{
+		return false;
+	}
+
+
+	Node* parent = getParentByKey(tree, key);
+	//if (parent && parent->leftChild && parent->leftChild->key == key)
+	//{
+	//	tree = parent->leftChild;
+	//}
+	//if (parent && parent->rightChild && parent->rightChild->key == key)
+	//{
+	//	tree = parent->rightChild;
+	//}
+
+	if (tree->leftChild == nullptr && tree->rightChild == nullptr)
+	{
+		if (parent && parent->leftChild == tree)
+		{
+			parent->leftChild = nullptr;
+		}
+
+		if (parent && parent->rightChild == tree)
+		{
+			parent->rightChild = nullptr;
+		}
+
+		if (!parent)
+		{
+			m_root = nullptr;
+		}
+
+		delete tree;
+		return true;
+	}
+
+	if (tree->leftChild == nullptr && tree->rightChild != nullptr)
+	{
+		if (parent && parent->leftChild == tree)
+		{
+			parent->leftChild = tree->rightChild;
+		}
+
+		if (parent && parent->rightChild == tree)
+		{
+			parent->rightChild = tree->rightChild;
+		}
+
+		if (!parent)
+		{
+			m_root = tree->leftChild;
+		}
+
+		delete tree;
+		return true;
+	}
+
+	if (tree->leftChild != nullptr && tree->rightChild == nullptr)
+	{
+		if (parent && parent->leftChild == tree)
+		{
+			parent->leftChild = tree->leftChild;
+		}
+
+		if (parent && parent->rightChild == tree)
+		{
+			parent->rightChild = tree->leftChild;
+		}
+
+		if (!parent)
+		{
+			m_root = tree->leftChild;
+		}
+
+		delete tree;
+		return true;
+	}
+
+	if (tree->leftChild && tree->rightChild)
+	{
+		if (parent)
+		{
+			if (parent->leftChild == tree)
+			{
+				Node* rightDescendant = tree->rightChild;
+				Node* leftDescendant = tree->leftChild;
+				delete tree;
+				parent->leftChild = leftDescendant;
+				Node* parentOfLeaf = leftDescendant;
+				while (parentOfLeaf->leftChild != nullptr)
+					parentOfLeaf = parentOfLeaf->leftChild;
+				parentOfLeaf->leftChild = rightDescendant;
+				return true;
+			}
+			else if (parent->rightChild == tree)
+			{
+				Node* rightDescendant = tree->rightChild;
+				Node* leftDescendant = tree->leftChild;
+				delete tree;
+				parent->rightChild = leftDescendant;
+				Node* parentOfLeaf = leftDescendant;
+				while (parentOfLeaf->leftChild != nullptr)
+					parentOfLeaf = parentOfLeaf->leftChild;
+				parentOfLeaf->leftChild = rightDescendant;
+				return true;
+			}
+		}
+		else
+		{
+			Node* rightDescendant = tree->rightChild;
+			Node* leftDescendant = tree->leftChild;
+			delete tree;
+			m_root = leftDescendant;
+			Node* parentOfLeaf = m_root;
+			while (parentOfLeaf->leftChild != nullptr)
+				parentOfLeaf = parentOfLeaf->leftChild;
+			parentOfLeaf->leftChild = rightDescendant;
+			return true;
+		}
+	}
+	return false;
+}
 
 void BinaryTree::getKeys(Node *tree, std::vector<int> &vector)
 {

@@ -12,6 +12,7 @@ int main()
 
 	bt.deleteKnot(bt.getRoot(), 6);
 	bt.printHorizontal();
+	std::cout << bt.getNumber(bt.getRoot());
 	
 
 	return 0;

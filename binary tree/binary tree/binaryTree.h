@@ -48,7 +48,8 @@ public:
 
 	//удаление узла из дерева по ключу(возвращает true, если узел был удалён)
 	bool deleteKnot(Node *tree, const int key);
-	Node *getKnotTree(Node *tree, const int key);
+	Node *getParentByKey(Node *tree, const int key);
+	Node *getTreeByKey(Node *tree, const int key);
 
 	//получение вектора(std::vector<int>), содержащего все ключи дерева(обход вершин производить любым способом);
 	std::vector<int> getVectorKeys(Node *tree);
