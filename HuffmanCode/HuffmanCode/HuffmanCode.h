@@ -1,4 +1,5 @@
 #pragma once
+#include <string>
 
 class Node
 {
@@ -23,6 +24,20 @@ class Node
 
 class HuffmanCode
 {
+private:
+	Node *m_root;
+	std::string encode;
+	std::string decode;
 
+public:
+	HuffmanCode();
+
+	HuffmanCode();
+
+	void build(std::string &string);
+
+	int encode(std::string &string, std::string &stringCoded);
+
+	bool decode(std::string &string, std::string &stringDecoded);
 };
 
