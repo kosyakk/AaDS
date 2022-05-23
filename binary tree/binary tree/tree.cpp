@@ -10,8 +10,9 @@ int main()
 	bt.printHorizontal();
 	std::cout << std::endl << std::endl << std::endl;
 
-	bt.deleteKnot(bt.getRoot(), 8);
+	bt.deleteKnot(bt.getRoot(), 4);
 	bt.printHorizontal();
+	
 
 	return 0;
 }

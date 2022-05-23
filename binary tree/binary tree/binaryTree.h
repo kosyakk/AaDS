@@ -48,6 +48,8 @@ public:
 
 	//удаление узла из дерева по ключу(возвращает true, если узел был удалён)
 	bool deleteKnot(Node *tree, const int key);
+	Node *getParentByKey(Node *tree, const int key);
+	Node *getTreeByKey(Node *tree, const int key);
 
 	//получение вектора(std::vector<int>), содержащего все ключи дерева(обход вершин производить любым способом);
 	std::vector<int> getVectorKeys(Node *tree);
@@ -55,7 +57,6 @@ public:
 
 	//вывод в консоль дерева по уровням(через последовательные вызовы предыдущего метода);
 	void printHorizontal();
-	void printHorizontal(Node *subTreeRoot, const int level = 0);
 
 	//вывод в консоль уровня дерева("пустые" узлы так же вывести, т.о., общее число узлов уровня всегда постоянно : 2 ^ (индекс уровня));
 	void printLevel(const int level);
