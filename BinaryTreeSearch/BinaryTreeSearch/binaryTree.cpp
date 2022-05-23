@@ -196,9 +196,16 @@ Node* BinaryTree::getParentByKey(Node *tree, int key)
 				return tree;
 			}
 
-		getParentByKey(tree->leftChild, key);
-		getParentByKey(tree->rightChild, key);
-			
+			Node *parent = getParentByKey(tree->leftChild, key);
+
+			if (parent == nullptr)
+			{
+				return getParentByKey(tree->rightChild, key);
+			}
+			else
+			{
+				return parent;
+			}
 		}
 	}
 
