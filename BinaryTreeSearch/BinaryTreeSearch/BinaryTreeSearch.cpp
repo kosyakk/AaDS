@@ -114,11 +114,11 @@ bool BinaryTreeSearch::deleteKnot(Node *subTreeRoot, const int key)
 
 	if (subTreeRoot && subTreeRoot->leftChild == nullptr && subTreeRoot->rightChild == nullptr)
 	{
-		if (parent->leftChild = subTreeRoot)
+		if (parent->leftChild == subTreeRoot)
 		{
 			parent->leftChild = nullptr;
 		}
-		else if (parent->rightChild = subTreeRoot)
+		else if (parent->rightChild == subTreeRoot)
 		{
 			parent->rightChild = nullptr;
 		}
