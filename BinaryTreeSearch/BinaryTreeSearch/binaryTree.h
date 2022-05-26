@@ -16,7 +16,7 @@ struct Node
 
 class BinaryTree
 {
-private:
+protected:
 	Node *m_root = nullptr;
 	int m_size;
 
@@ -41,7 +41,7 @@ public:
 	bool isEmpty(Node *tree);
 
 	//получение высоты дерева;
-	int getHighTree(Node *tree, int high = 0);
+	int getHighTree(Node *tree);
 
 	//получение количества узлов дерева
 	int getNumber(Node *tree);
@@ -57,6 +57,7 @@ public:
 
 	//вывод в консоль дерева по уровням(через последовательные вызовы предыдущего метода);
 	void printHorizontal();
+	void printHorizontal(const int high);
 
 	//вывод в консоль уровня дерева("пустые" узлы так же вывести, т.о., общее число узлов уровня всегда постоянно : 2 ^ (индекс уровня));
 	void printLevel(const int level);
