@@ -62,15 +62,19 @@ int HuffmanCode::encode(Node *root, std::string string)
 	std::vector<Node*> vectorNode;
 	for (auto leaf : numberTable)
 	{
-		Node tmp(leaf.first, leaf.second);
-		vectorNode.push_back(&tmp);
+		Node *tmp = new Node(leaf.first, leaf.second);
+		vectorNode.push_back(tmp);
 	} 
 
-	std::sort(vectorNode.begin(), vectorNode.end());
+	std::sort(vectorNode.begin(), vectorNode.end(), [](Node *a, Node *b)->bool
+	{
+		return a->m_frequency < b->m_frequency;
+	}
+	);
 
 	for (unsigned int i = 0; i < vectorNode.size(); i++)
 	{
-		std::cout << vectorNode[i]->m_frequency << std::endl;
+		std::cout << vectorNode[i]->m_frequency << " " << vectorNode[i]->m_key << std::endl;
 	}
 
 

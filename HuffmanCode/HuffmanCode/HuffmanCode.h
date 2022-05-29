@@ -55,6 +55,7 @@ public:
 	int encode(Node *root, std::string string);
 	void encodePriority(Node *root, std::string string,
 		std::map<char, std::string> &codeTable);
+	bool comparator(Node * ptr_1, Node * ptr_2);
 	std::map<char, int> createMap(std::string &string);
 
 	bool decode(std::string &string, std::string &decode);
