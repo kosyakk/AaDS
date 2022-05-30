@@ -133,14 +133,30 @@ void BinaryTree::printLevel(Node * subTreeRoot, const int level, const int curre
 		}
 	}
 
-	if (currentLevel == level && subTreeRoot) 
+	if (currentLevel == level) 
 	{
+		if (subTreeRoot)
+		{
 			std::cout << subTreeRoot->key << "   ";
+		}
+		else
+		{
+			std::cout << "x    ";
+		}
+			
 	}
-	else if (subTreeRoot && currentLevel < level) 
+	else if (currentLevel < level) 
 	{
-		printLevel(subTreeRoot->leftChild, level, currentLevel + 1);
-		printLevel(subTreeRoot->rightChild, level, currentLevel + 1);
+		if (subTreeRoot)
+		{
+			printLevel(subTreeRoot->leftChild, level, currentLevel + 1);
+			printLevel(subTreeRoot->rightChild, level, currentLevel + 1);
+		}
+		else
+		{
+			printLevel(nullptr, level, currentLevel + 1);
+			printLevel(nullptr, level, currentLevel + 1);
+		}
 	}
 }
 
