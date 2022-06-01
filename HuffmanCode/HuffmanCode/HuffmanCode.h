@@ -40,8 +40,6 @@ class HuffmanCode
 private:
 	Node *m_root;
 	std::map<char, std::string> m_codeTable;
-	std::string m_encode;
-	std::string m_decode;
 
 public:
 	HuffmanCode();
@@ -50,14 +48,11 @@ public:
 
 	Node *getRoot();
 
-	void build(std::string &string);
-
-	int encode(Node *root, std::string string);
-	void encodePriority(Node *root, std::string string,
+	void build(Node *root, std::string &string);
+	int encode(Node *root, std::string string,
 		std::map<char, std::string> &codeTable);
-	bool comparator(Node * ptr_1, Node * ptr_2);
 	std::map<char, int> createMap(std::string &string);
 
-	bool decode(std::string &string, std::string &decode);
+	bool decode(Node *root, std::string &stringEncode, std::string &string);
+	char decodeRek(Node* root, int &index, std::string &string);
 };
-

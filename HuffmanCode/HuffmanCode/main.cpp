@@ -4,7 +4,7 @@ int main()
 {
 	HuffmanCode huf;
 
-	std::string string{ "Mama myla ramu" };
+	std::string string{ "Aaafjdskljfofawj;oibnfda;o kdljfoijewo." };
 
-	huf.encode(huf.getRoot(), string);
+	huf.build(huf.getRoot(), string);
 }
