@@ -212,7 +212,7 @@ bool BinaryTree::deleteKnot(Node *tree, const int key)
 	}
 
 	Node *parent = nullptr;
-	if (tree && tree->key != key)
+	if (tree->key != key)
 	{
 		parent = getParentByKey(tree, key);
 		tree = getTreeByKey(parent, key);
