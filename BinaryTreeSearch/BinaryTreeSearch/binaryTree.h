@@ -20,6 +20,8 @@ protected:
 	Node *m_root = nullptr;
 	int m_size;
 
+	bool deleteKnotWithParent(Node *tree, const int key, Node *parent);
+
 public:
 	//конструкторы(по умолчанию и с параметрами)
 	BinaryTree();

@@ -22,7 +22,6 @@ void BinaryTree::deleteTree(Node *tree)
 	{
 		deleteTree(tree->leftChild);
 		deleteTree(tree->rightChild);
-		m_size--;
 		delete tree;
 	}
 }
@@ -219,55 +218,245 @@ bool BinaryTree::deleteKnot(Node *tree, const int key)
 		tree = getTreeByKey(parent, key);
 	}
 
+
 	if (tree && tree->leftChild == nullptr && tree->rightChild == nullptr)
 	{
-		if (parent->leftChild == tree)
+		if (parent)
 		{
-			parent->leftChild = nullptr;
-		}
+			if (parent->leftChild == tree)
+			{
+				parent->leftChild = nullptr;
+			}
 
-		if (parent->rightChild == tree)
+			else if (parent->rightChild == tree)
+			{
+				parent->rightChild = nullptr;
+			}
+
+			m_size--;
+			delete tree;
+			return true;
+		}
+		else
 		{
-			parent->rightChild = nullptr;
+			m_size--;
+			delete tree;
+			m_root = nullptr;
+			return true;
 		}
-
-		m_size--;
-		delete tree;
-		return true;
 	}
 
 	if (tree && tree->leftChild == nullptr && tree->rightChild != nullptr)
 	{
-		if (parent->leftChild == tree)
+		if (parent)
 		{
-			parent->leftChild = tree->rightChild;
+			if (parent->leftChild == tree)
+			{
+				parent->leftChild = tree->rightChild;
+			}
+
+			else if (parent->rightChild == tree)
+			{
+				parent->rightChild = tree->rightChild;
+			}
+
+			m_size--;
+			delete tree;
+			return true;
+		}
+		else
+		{
+			Node* rightDescendant = tree->rightChild;
+			m_size--;
+			delete tree;
+
+			m_root = rightDescendant;
+
+			return true;
 		}
 
-		if (parent->rightChild == tree)
-		{
-			parent->rightChild = tree->rightChild;
-		}
-
-		m_size--;
-		delete tree;
-		return true;
+		
 	}
 
 	if (tree && tree->leftChild != nullptr && tree->rightChild == nullptr)
 	{
-		if (parent->leftChild == tree)
+		if (parent)
 		{
-			parent->leftChild = tree->leftChild;
+			if (parent->leftChild == tree)
+			{
+				parent->leftChild = tree->leftChild;
+			}
+
+			else if (parent->rightChild == tree)
+			{
+				parent->rightChild = tree->leftChild;
+			}
+
+			m_size--;
+			delete tree;
+			return true;
+		}
+		else
+		{
+			Node* leftDescendant = tree->leftChild;
+			m_size--;
+			delete tree;
+
+			m_root = leftDescendant;
+
+			return true;
+		}
+	}
+
+	if (tree && tree->leftChild && tree->rightChild)
+	{
+		if (parent)
+		{
+			if (parent->leftChild == tree)
+			{
+				Node* rightDescendant = tree->rightChild;
+				Node* leftDescendant = tree->leftChild;
+				m_size--;
+				delete tree;
+
+				parent->leftChild = leftDescendant;
+				Node* parentOfLeaf = leftDescendant;
+				while (parentOfLeaf->leftChild != nullptr)
+					parentOfLeaf = parentOfLeaf->leftChild;
+				parentOfLeaf->leftChild = rightDescendant;
+
+				return true;
+			}
+			else if (parent->rightChild == tree)
+			{
+				Node* rightDescendant = tree->rightChild;
+				Node* leftDescendant = tree->leftChild;
+				m_size--;
+				delete tree;
+
+				parent->rightChild = leftDescendant;
+				Node* parentOfLeaf = leftDescendant;
+				while (parentOfLeaf->leftChild != nullptr)
+					parentOfLeaf = parentOfLeaf->leftChild;
+				parentOfLeaf->leftChild = rightDescendant;
+
+				return true;
+			}
+		}
+		else
+		{
+			Node* rightDescendant = tree->rightChild;
+			Node* leftDescendant = tree->leftChild;
+			m_size--;
+			delete tree;
+
+			m_root = leftDescendant;
+			Node* parentOfLeaf = m_root;
+			while (parentOfLeaf->leftChild != nullptr)
+				parentOfLeaf = parentOfLeaf->leftChild;
+			parentOfLeaf->leftChild = rightDescendant;
+
+			return true;
+		}
+	}
+
+	return false;
+}
+
+bool BinaryTree::deleteKnotWithParent(Node *tree, const int key, Node *parent)
+{
+	if (tree == nullptr)
+	{
+		return false;
+	}
+
+	if (tree && tree->leftChild == nullptr && tree->rightChild == nullptr)
+	{
+		if (parent)
+		{
+			if (parent->leftChild == tree)
+			{
+				parent->leftChild = nullptr;
+			}
+
+			else if (parent->rightChild == tree)
+			{
+				parent->rightChild = nullptr;
+			}
+
+			m_size--;
+			delete tree;
+			return true;
+		}
+		else
+		{
+			m_size--;
+			delete tree;
+			m_root = nullptr;
+			return true;
+		}
+	}
+
+	if (tree && tree->leftChild == nullptr && tree->rightChild != nullptr)
+	{
+		if (parent)
+		{
+			if (parent->leftChild == tree)
+			{
+				parent->leftChild = tree->rightChild;
+			}
+
+			else if (parent->rightChild == tree)
+			{
+				parent->rightChild = tree->rightChild;
+			}
+
+			m_size--;
+			delete tree;
+			return true;
+		}
+		else
+		{
+			Node* rightDescendant = tree->rightChild;
+			m_size--;
+			delete tree;
+
+			m_root = rightDescendant;
+
+			return true;
 		}
 
-		if (parent->rightChild == tree)
-		{
-			parent->rightChild = tree->leftChild;
-		}
 
-		m_size--;
-		delete tree;
-		return true;
+	}
+
+	if (tree && tree->leftChild != nullptr && tree->rightChild == nullptr)
+	{
+		if (parent)
+		{
+			if (parent->leftChild == tree)
+			{
+				parent->leftChild = tree->leftChild;
+			}
+
+			else if (parent->rightChild == tree)
+			{
+				parent->rightChild = tree->leftChild;
+			}
+
+			m_size--;
+			delete tree;
+			return true;
+		}
+		else
+		{
+			Node* leftDescendant = tree->leftChild;
+			m_size--;
+			delete tree;
+
+			m_root = leftDescendant;
+
+			return true;
+		}
 	}
 
 	if (tree && tree->leftChild && tree->rightChild)
