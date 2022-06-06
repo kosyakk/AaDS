@@ -112,14 +112,22 @@ bool BinaryTreeSearch::deleteKnot(Node *subTreeRoot, const int key)
 		}
 	}
 
-	if (deleteKnotWithParent(subTreeRoot, key, parent))
+	if (subTreeRoot)
 	{
-		return true;
+		if (deleteKnotWithParent(subTreeRoot, key, parent))
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
 	}
 	else
 	{
-		return false;
+		return true;
 	}
+	
 
 	/*if (subTreeRoot && subTreeRoot->leftChild == nullptr && subTreeRoot->rightChild == nullptr)
 	{

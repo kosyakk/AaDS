@@ -96,14 +96,15 @@ bool testSearchTree(int size)
 
 	int index, key;
 
+	searchTree.deleteKnot(searchTree.getRoot(), 13);
 
 	while (nodesKeys.size()) {
-		index = rand() % nodesKeys.size();
-		nodesKeys.erase(nodesKeys.begin() + index);
-		if (!searchTree.deleteKnot(searchTree.getRoot(), index)) {
-			failedCase = 1;
-			break;
-		}
+	//	index = rand() % nodesKeys.size();
+	//	nodesKeys.erase(nodesKeys.begin() + index);
+	//	if (!searchTree.deleteKnot(searchTree.getRoot(), index)) {
+	//		failedCase = 1;
+	//		break;
+	//	}
 
 
 		/*if (testSearchTree(searchTree, nodesKeys.size())) {
@@ -128,7 +129,6 @@ bool testSearchTree(int size)
 			}*/
 		}
 	}
-
 
 	if (failedCase || !searchTree.isEmpty(searchTree.getRoot())) {
 		if (!failedCase) {
@@ -207,14 +207,15 @@ bool testSearchTreeAsBinaryTree(int size)
 
 	int index, key;
 
+	searchTree.deleteKnot(searchTree.getRoot(), 13);
 
 	while (nodesKeys.size()) {
-		index = rand() % nodesKeys.size();
+		/*index = rand() % nodesKeys.size();
 		nodesKeys.erase(nodesKeys.begin() + index);
 		if (!searchTreeRef.deleteKnot(searchTreeRef.getRoot(), index)) {
 			failedCase = 1;
 			break;
-		}
+		}*/
 
 
 		/*if (testSearchTreeAsBinaryTree(searchTreeRef, nodesKeys.size())) {
@@ -265,12 +266,12 @@ int main()
 
 	//test();
 
-	if (testSearchTree(5) == 0)
+	if (testSearchTree(5))
 	{
 		std::cout << "true" << std::endl;
 	}
 
-	if (testSearchTreeAsBinaryTree(5) == 0)
+	if (testSearchTreeAsBinaryTree(5))
 	{
 		std::cout << "true" << std::endl;
 	}
