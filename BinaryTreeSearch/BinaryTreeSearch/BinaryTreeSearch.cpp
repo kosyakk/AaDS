@@ -112,73 +112,100 @@ bool BinaryTreeSearch::deleteKnot(Node *subTreeRoot, const int key)
 		}
 	}
 
-	if (subTreeRoot)
+	if (subTreeRoot == nullptr)
 	{
-		if (deleteKnotWithParent(subTreeRoot, key, parent))
+		return true;
+	}
+
+	if (subTreeRoot && subTreeRoot->leftChild == nullptr && subTreeRoot->rightChild == nullptr)
+	{
+		if (parent)
 		{
+			if (parent->leftChild == subTreeRoot)
+			{
+				parent->leftChild = nullptr;
+			}
+
+			else if (parent->rightChild == subTreeRoot)
+			{
+				parent->rightChild = nullptr;
+			}
+
+			m_size--;
+			delete subTreeRoot;
 			return true;
 		}
 		else
 		{
-			return false;
+			m_size--;
+			delete subTreeRoot;
+			m_root = nullptr;
+			return true;
 		}
-	}
-	else
-	{
-		return true;
-	}
-	
-
-	/*if (subTreeRoot && subTreeRoot->leftChild == nullptr && subTreeRoot->rightChild == nullptr)
-	{
-		if (parent->leftChild == subTreeRoot)
-		{
-			parent->leftChild = nullptr;
-		}
-		else if (parent->rightChild == subTreeRoot)
-		{
-			parent->rightChild = nullptr;
-		}
-
-		delete subTreeRoot;
-		m_size--;
-		return true;
 	}
 
 	if (subTreeRoot && subTreeRoot->leftChild == nullptr && subTreeRoot->rightChild != nullptr)
 	{
-		if (parent->leftChild == subTreeRoot)
+		if (parent)
 		{
-			parent->leftChild = subTreeRoot->rightChild;
+			if (parent->leftChild == subTreeRoot)
+			{
+				parent->leftChild = subTreeRoot->rightChild;
+			}
+
+			else if (parent->rightChild == subTreeRoot)
+			{
+				parent->rightChild = subTreeRoot->rightChild;
+			}
+
+			m_size--;
+			delete subTreeRoot;
+			return true;
+		}
+		else
+		{
+			Node* rightDescendant = subTreeRoot->rightChild;
+			m_size--;
+			delete subTreeRoot;
+
+			m_root = rightDescendant;
+
+			return true;
 		}
 
-		if (parent->rightChild == subTreeRoot)
-		{
-			parent->rightChild = subTreeRoot->rightChild;
-		}
 
-		delete subTreeRoot;
-		m_size--;
-		return true;
 	}
 
 	if (subTreeRoot && subTreeRoot->leftChild != nullptr && subTreeRoot->rightChild == nullptr)
 	{
-		if (parent->leftChild == subTreeRoot)
+		if (parent)
 		{
-			parent->leftChild = subTreeRoot->leftChild;
-		}
+			if (parent->leftChild == subTreeRoot)
+			{
+				parent->leftChild = subTreeRoot->leftChild;
+			}
 
-		if (parent->rightChild == subTreeRoot)
+			else if (parent->rightChild == subTreeRoot)
+			{
+				parent->rightChild = subTreeRoot->leftChild;
+			}
+
+			m_size--;
+			delete subTreeRoot;
+			return true;
+		}
+		else
 		{
-			parent->rightChild = subTreeRoot->leftChild;
-		}
+			Node* leftDescendant = subTreeRoot->leftChild;
+			m_size--;
+			delete subTreeRoot;
 
-		delete subTreeRoot;
-		m_size--;
-		return true;
+			m_root = leftDescendant;
+
+			return true;
+		}
 	}
-
+	
 	if (subTreeRoot && subTreeRoot->leftChild && subTreeRoot->rightChild)
 	{
 		if (parent)
@@ -231,7 +258,7 @@ bool BinaryTreeSearch::deleteKnot(Node *subTreeRoot, const int key)
 		}
 	}
 
-	return false;*/
+	return false;
 }
 
 
