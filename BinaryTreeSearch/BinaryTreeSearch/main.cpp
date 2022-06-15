@@ -207,7 +207,7 @@ bool testSearchTreeAsBinaryTree(int size)
 
 	int index, key;
 
-	searchTree.deleteKnot(searchTree.getRoot(), 13);
+	searchTreeRef.deleteKnot(searchTreeRef.getRoot(), 13);
 
 	while (nodesKeys.size()) {
 		/*index = rand() % nodesKeys.size();
@@ -262,17 +262,15 @@ bool testSearchTreeAsBinaryTree(int size)
 
 int main()
 {
-	//BinaryTreeSearch tree;
+	test();
 
-	//test();
-
-	if (testSearchTree(5))
+	if (testSearchTree(150))
 	{
-		std::cout << "true" << std::endl;
+		std::cout << "true1" << std::endl;
 	}
 
-	if (testSearchTreeAsBinaryTree(5))
+	if (testSearchTreeAsBinaryTree(150))
 	{
-		std::cout << "true" << std::endl;
+		std::cout << "true2" << std::endl;
 	}
 }
