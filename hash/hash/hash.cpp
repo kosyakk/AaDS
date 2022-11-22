@@ -1,6 +1,9 @@
-﻿#include <iostream>
+﻿#include "HashTable.h"
 
 int main()
 {
-    std::cout << "Hello World!\n";
+    HashTable hash;
+
+    hash.add(2, 4);
+    hash.print();
 }

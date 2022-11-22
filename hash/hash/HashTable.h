@@ -1,13 +1,63 @@
-#pragma once
-class HashTable
-{
-private:
+﻿#include <math.h>
+#include <iostream>
 
+//номер в списке - 19, номер варианта 1-1;
+//открытая адресация;
+//hi(K) = (hi-1(K) + c × i + d × i2) mod N; параметры c и d определяются как остаток от деления вашего номера в списке ниже на 5 и 7 соответственно;
+class HashFunction
+{
 public:
-	HashTable();					//default constructor
-	~HashTable();					//destructor
-	void add(int key);				//add elem by key
-	void deleteByKey(int key);		//delete elem by key
-	bool check(int key);			//checking id an elem exists in a table
+    int hash(int index, int key, int size)
+    {
+        int hash = key % size;
+        for (int i = 0; i < index; i++)
+        {
+            hash = (hash + 4 * i + 5 * i * i) % size;
+        }
+        return abs(hash);
+    }
 };
 
+class HashTable
+{
+public:
+class HashCell;
+
+private:
+    HashFunction* hf;
+    int m_actual_size = 0;
+    int m_size;
+    HashCell* m_table;
+
+public:
+    enum state
+    {
+        empty,
+        filled,
+        deleted
+    };
+
+    class HashCell
+    {
+    public:
+        int m_value;
+        int m_key;
+        int m_next;
+        state m_state;
+
+        HashCell(int key = -1, int next = -1, int value = int(), state initialState = empty)
+        {
+            m_key = key;
+            m_next = next;
+            m_value = value;
+            m_state = initialState;
+        }
+    };
+
+    HashTable();
+    ~HashTable();
+    bool add(int key, int value);
+    bool deleteByKey(int key);
+    bool check(int key);
+    void print();
+};
