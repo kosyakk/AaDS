@@ -2,20 +2,14 @@
 #include <iostream>
 
 //номер в списке - 19, номер варианта 1-1;
-//открытая адресация;
+//открытая адресация; выходит, что с внутренними цепочками
 //hi(K) = (hi-1(K) + c × i + d × i2) mod N; параметры c и d определяются как остаток от деления вашего номера в списке ниже на 5 и 7 соответственно;
+
 class HashFunction
 {
 public:
-    int hash(int index, int key, int size)
-    {
-        int hash = key % size;
-        for (int i = 0; i < index; i++)
-        {
-            hash = (hash + 4 * i + 5 * i * i) % size;
-        }
-        return abs(hash);
-    }
+    virtual int hash(int index, int key, int size) = 0;
+    virtual ~HashFunction() = default;
 };
 
 class HashTable
@@ -59,5 +53,6 @@ public:
     bool add(int key, int value);
     bool deleteByKey(int key);
     bool check(int key);
-    void print();
+    HashTable(int size);
+    void replaceHashFunction(HashFunction* newHashFunction);//замена хеш - функции(места для уже добавленных элементов должны быть пересчитаны в соответствии с новой функцией);
 };

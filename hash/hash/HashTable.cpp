@@ -1,11 +1,42 @@
 ﻿#include "HashTable.h"
 
+class HashFunction1 : public HashFunction
+{
+public:
+    int hash(int index, int key, int size) override
+    {
+        int hash = key % size;
+        for (int i = 0; i < index; i++)
+        {
+            hash = (hash + 4 * i + 5 * i * i) % size;
+        }
+        return abs(hash);
+    }
+} hf1;
+
+
+class HashFunction2 : public HashFunction
+{
+public:
+    int hash(int index, int key, int size) override
+    {
+        //2 - hi(K) = [hi-1(K) × a × N] mod N, a = – (1 – √5) ÷ 2, [ ] – целая часть;
+        int hash = key % size;
+        double a = -(1 - sqrt(5)) / 2;
+        for (int i = 0; i < index; i++)
+        {
+            hash = ((int)(hash * a * size) + 1) % size;
+        }
+        return abs(hash);
+    }
+} hf2;
+
 HashTable::HashTable()
 {
-    m_size = 1;
+    m_size = 10;
     m_actual_size = 0;
     m_table = new HashCell[m_size];
-    hf = 0;
+    hf = &hf1;
 }
 
 HashTable::~HashTable()
@@ -99,15 +130,26 @@ bool HashTable::deleteByKey(int key)
     return false;
 }
 
-void HashTable::print()
+HashTable::HashTable(int size)
 {
+    m_size = size;
+    m_actual_size = 0;
+    m_table = new HashCell[m_size];
+    hf = &hf1;
+}
+
+void HashTable::replaceHashFunction(HashFunction* newHashFunction)
+{
+    hf = newHashFunction;
+    HashTable *temp = new HashTable(m_size);
+    temp->hf = newHashFunction;
     for (int i = 0; i < m_size; i++)
     {
         if (m_table[i].m_state != empty)
         {
-            std::cout << "(" << i << ") " << m_table[i].m_key << " : '" << m_table[i].m_value << "'"
-                << ((m_table[i].m_state == filled) ? " filled" : " deleted") << '\n';
+            (*temp).add(m_table[i].m_key, m_table[i].m_value);
         }
     }
+    *this = (*temp);
+    delete temp;
 }
-
