@@ -1,17 +1,29 @@
 #include "HuffmanCode.h"
 
+<<<<<<< HEAD
 void HuffmanCode::encode(Node* root, std::string str, std::unordered_map<char, std::string>& huffmanCode)
+=======
+void HuffmanCode::encode(Node* root, std::string charCode, std::unordered_map<char, std::string>& charCodes)
+>>>>>>> hashTable
 {
 	if (root == nullptr)
 		return;
 
 	if (!root->leftChild && !root->rightChild) 
 	{
+<<<<<<< HEAD
 		huffmanCode[root->key] = str;
 	}
 
 	encode(root->leftChild, str + "0", huffmanCode);
 	encode(root->rightChild, str + "1", huffmanCode);
+=======
+		charCodes[root->key] = charCode;
+	}
+
+	encode(root->leftChild, charCode + "0", charCodes);
+	encode(root->rightChild, charCode + "1", charCodes);
+>>>>>>> hashTable
 }
 
 void HuffmanCode::decode(Node* root, int& index, std::string str)
